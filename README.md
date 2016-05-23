@@ -1,5 +1,8 @@
 [![Build Status](https://travis-ci.org/innowatio/iwwa-lambda-formulas.svg?branch=master)](https://travis-ci.org/innowatio/iwwa-lambda-formulas)
 [![codecov.io](https://codecov.io/github/innowatio/iwwa-lambda-formulas/coverage.svg?branch=master)](https://codecov.io/github/iwwa-lambda-formulas?branch=master)
+[![Dependency Status](https://david-dm.org/innowatio/iwwa-lambda-formulas.svg)](https://david-dm.org/innowatio/iwwa-lambda-formulas)
+[![devDependency Status](https://david-dm.org/innowatio/iwwa-lambda-formulas/dev-status.svg)](https://david-dm.org/innowatio/iwwa-lambda-formulas#info=devDependencies)
+
 
 # iwwa-lambda-formulas
 
