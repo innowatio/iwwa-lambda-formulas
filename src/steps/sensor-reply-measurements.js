@@ -1,5 +1,5 @@
 import flattendeep from "lodash.flattendeep";
-import isEqual from "lodash.isEqual";
+import isequal from "lodash.isequal";
 import moment from "moment";
 
 import {find} from "../services/mongodb";
@@ -18,7 +18,7 @@ export function findFormulasDelta (sensor, sensorCompare) {
     var formulaDelta = sensor1.formulas.reduce((prev, formula) => {
         var finded = sensor2.formulas.find(x => {
             return x.formula === formula.formula &&
-                isEqual(x.measurementType.sort(), formula.measurementType.sort()) &&
+                isequal(x.measurementType.sort(), formula.measurementType.sort()) &&
                 x.start === formula.start &&
                 x.end === formula.end;
         });
