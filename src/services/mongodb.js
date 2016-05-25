@@ -27,7 +27,7 @@ export async function upsert (collection, id, object) {
     const db = await getMongoClient();
     await db.collection(collection).update(
         {_id: id},
-        {$set: object},
+        object,
         {upsert: true}
     );
 }

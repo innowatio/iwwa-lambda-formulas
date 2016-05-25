@@ -204,10 +204,10 @@ describe("On sensor", async () => {
         expect(context.fail).to.not.have.been.calledOnce;
 
         const virtualSensors = await findVirtualSensor({_id: virtualSensor._id});
-        expect(virtualSensors.length).to.equal(1);
+        expect(virtualSensors.length).to.be.equal(1);
 
-        const sensors = await findSensorAggregate({});
-        expect(sensors.length).to.equal(4);
+        const sensors = await findSensorAggregate();
+        expect(sensors.length).to.be.equal(4);
 
         expect(virtualSensors[0]).to.deep.equal(expected);
     });
