@@ -5,12 +5,13 @@
   "main": "src/index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/innowation/iwwa-lambda-formulas.git"
+    "url": "https://github.com/innowatio/iwwa-lambda-formulas.git"
   },
   "dependencies": {
     "babel-polyfill": "^6.9.0",
     "bunyan": "^1.8.1",
     "dotenv": "^2.0.0",
+    "iwwa-formula-resolver": "^1.0.0",
     "kinesis-router": "^1.2.1",
     "lodash.flattendeep": "^4.2.0",
     "lodash.isequal": "^4.2.0",

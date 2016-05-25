@@ -1,7 +1,8 @@
 import isequal from "lodash.isequal";
 import moment from "moment";
 
-import {evaluateFormulaDaily} from "./sensor-formulas-evaluator";
+import {evaluateFormulaDaily} from "iwwa-formula-resolver";
+
 import {findVirtualSensor, findSensorAggregate} from "../services/mongodb";
 
 export async function replySensor (decoratedSensor) {
