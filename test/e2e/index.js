@@ -5,12 +5,12 @@ import sinonChai from "sinon-chai";
 chai.use(sinonChai);
 
 import {handler} from "index";
-import {getMongoClient, findVirtualSensor} from "services/mongodb";
+import {getMongoClient, findSensorAggregate, findVirtualSensor} from "services/mongodb";
 import {getEventFromObject} from "../mocks";
-import {VIRTUAL_SENSORS_FORMULAS_COLLECTION_NAME} from "config";
+import {SENSOR_AGGREGATES_COLLECTION_NAME, VIRTUAL_SENSORS_FORMULAS_COLLECTION_NAME} from "config";
 
 const sensor = {
-    _id: "_id",
+    _id: "VIRTUAL01",
     description: "a description",
     name: "Sensore ambientale",
     type: "ZTHL",
@@ -42,10 +42,12 @@ describe("On sensor", async () => {
 
     before(async () => {
         db = await getMongoClient();
+        await db.createCollection(SENSOR_AGGREGATES_COLLECTION_NAME);
         await db.createCollection(VIRTUAL_SENSORS_FORMULAS_COLLECTION_NAME);
     });
 
     after(async () => {
+        await db.dropCollection(SENSOR_AGGREGATES_COLLECTION_NAME);
         await db.dropCollection(VIRTUAL_SENSORS_FORMULAS_COLLECTION_NAME);
         await db.close();
     });
@@ -92,7 +94,7 @@ describe("On sensor", async () => {
             type: "element inserted in collection sensors"
         });
         const expected = {
-            _id: "_id",
+            _id: "VIRTUAL01",
             formulas: [{
                 formula: "IT001E00088487",
                 measurementType: ["activeEnergy", "temperature"],
@@ -115,7 +117,7 @@ describe("On sensor", async () => {
         expect(context.succeed).to.have.been.calledOnce;
         expect(context.fail).to.not.have.been.calledOnce;
 
-        const allSensors = await findVirtualSensor({_id: "_id"});
+        const allSensors = await findVirtualSensor({_id: virtualSensor._id});
         expect(allSensors.length).to.equal(1);
 
         expect(allSensors[0]).to.deep.equal(expected);
@@ -135,7 +137,7 @@ describe("On sensor", async () => {
             type: "element inserted in collection sensors"
         });
         const expected = {
-            _id: "_id",
+            _id: "VIRTUAL01",
             formulas: [{
                 formula: "IT001E00088487",
                 measurementType: ["activeEnergy", "temperature"],
@@ -158,7 +160,7 @@ describe("On sensor", async () => {
         expect(context.succeed).to.have.been.calledOnce;
         expect(context.fail).to.not.have.been.calledOnce;
 
-        const allSensors = await findVirtualSensor({_id: "_id"});
+        const allSensors = await findVirtualSensor({_id: virtualSensor._id});
         expect(allSensors.length).to.equal(1);
 
         expect(allSensors[0]).to.deep.equal(expected);
@@ -184,7 +186,7 @@ describe("On sensor", async () => {
             type: "element inserted in collection sensors"
         });
         const expected = {
-            _id: "_id",
+            _id: "VIRTUAL01",
             formulas: [{
                 formula: "ANZ01 + ANZ02",
                 measurementType: ["activeEnergy", "temperature"],
@@ -201,9 +203,12 @@ describe("On sensor", async () => {
         expect(context.succeed).to.have.been.calledOnce;
         expect(context.fail).to.not.have.been.calledOnce;
 
-        const allSensors = await findVirtualSensor({_id: "_id"});
-        expect(allSensors.length).to.equal(1);
+        const virtualSensors = await findVirtualSensor({_id: virtualSensor._id});
+        expect(virtualSensors.length).to.equal(1);
 
-        expect(allSensors[0]).to.deep.equal(expected);
+        const sensors = await findSensorAggregate({});
+        expect(sensors.length).to.equal(4);
+
+        expect(virtualSensors[0]).to.deep.equal(expected);
     });
 });

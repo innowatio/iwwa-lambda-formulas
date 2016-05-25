@@ -103,36 +103,42 @@ describe("`retrieveSensorIds` function", () => {
             formula: "ANZ01 + ANZ02",
             measurements: [
                 {
+                    date: "1970-01-01",
                     id: [
                         "ANZ01-1970-01-01-reading-activeEnergy",
                         "ANZ02-1970-01-01-reading-activeEnergy"
                     ],
                     "measurementType": "activeEnergy"
                 }, {
+                    date: "1970-01-02",
                     id: [
                         "ANZ01-1970-01-02-reading-activeEnergy",
                         "ANZ02-1970-01-02-reading-activeEnergy"
                     ],
                     "measurementType": "activeEnergy"
                 }, {
+                    date: "1970-01-03",
                     id: [
                         "ANZ01-1970-01-03-reading-activeEnergy",
                         "ANZ02-1970-01-03-reading-activeEnergy"
                     ],
                     "measurementType": "activeEnergy"
                 }, {
+                    date: "1970-01-01",
                     id: [
                         "ANZ01-1970-01-01-reading-temperature",
                         "ANZ02-1970-01-01-reading-temperature"
                     ],
                     "measurementType": "temperature"
                 }, {
+                    date: "1970-01-02",
                     id: [
                         "ANZ01-1970-01-02-reading-temperature",
                         "ANZ02-1970-01-02-reading-temperature"
                     ],
                     "measurementType": "temperature"
                 }, {
+                    date: "1970-01-03",
                     id: [
                         "ANZ01-1970-01-03-reading-temperature",
                         "ANZ02-1970-01-03-reading-temperature"

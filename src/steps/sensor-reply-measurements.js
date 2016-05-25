@@ -1,9 +1,9 @@
 import isequal from "lodash.isequal";
 import moment from "moment";
 
-import {evaluateFormulaDaily} from "iwwa-formula-resolver";
+import {evaluateFormula} from "iwwa-formula-resolver";
 
-import {findVirtualSensor, findSensorAggregate} from "../services/mongodb";
+import {findVirtualSensor, findSensorAggregate, upsertSensor} from "../services/mongodb";
 
 export async function replySensor (decoratedSensor) {
     var sensors = await findVirtualSensor({_id: decoratedSensor._id});
@@ -20,11 +20,19 @@ export async function replySensor (decoratedSensor) {
                     $in: formulaData.id
                 }
             });
-            const result = evaluateFormulaDaily(aggregate, sensorsData);
-            console.log({
-                ...result,
-                measurementType: formulaData.measurementType
-            });
+            
+            const result = evaluateFormula(aggregate, sensorsData);
+            
+            const virtualSensor = {
+                _id: `${decoratedSensor._id}-${formulaData.date}-reading-${formulaData.measurementType}`,
+                sensorId: decoratedSensor._id,
+                day: formulaData.date,
+                source: "reading",
+                measurementsDeltaInMs: 300000,
+                ...result
+            };
+            
+            await upsertSensor(virtualSensor._id, virtualSensor);
         });
     });
 }
@@ -54,6 +62,7 @@ export function retrieveSensorIds (formulas) {
                     return `${variable}-${start.format("YYYY-MM-DD")}-reading-${measurementType}`;
                 });
                 prevMeasurement = [...prevMeasurement, {
+                    date: start.format("YYYY-MM-DD"),
                     id,
                     measurementType
                 }];

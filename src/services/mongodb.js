@@ -16,10 +16,18 @@ export async function getMongoClient () {
 }
 
 export async function upsertVirtualSensor (id, virtualSensor) {
+    await upsert(VIRTUAL_SENSORS_FORMULAS_COLLECTION_NAME, id, virtualSensor);
+}
+
+export async function upsertSensor (id, virtualSensor) {
+    await upsert(SENSOR_AGGREGATES_COLLECTION_NAME, id, virtualSensor);
+}
+
+export async function upsert (collection, id, object) {
     const db = await getMongoClient();
-    await db.collection(VIRTUAL_SENSORS_FORMULAS_COLLECTION_NAME).update(
+    await db.collection(collection).update(
         {_id: id},
-        {$set: virtualSensor},
+        {$set: object},
         {upsert: true}
     );
 }
