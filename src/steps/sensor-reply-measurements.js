@@ -24,7 +24,6 @@ export async function replySensor (decoratedSensor) {
             const result = evaluateFormula(aggregate, sensorsData);
             
             const virtualSensor = {
-                _id: `${decoratedSensor._id}-${formulaData.date}-reading-${formulaData.measurementType}`,
                 sensorId: decoratedSensor._id,
                 day: formulaData.date,
                 source: "reading",
@@ -32,7 +31,9 @@ export async function replySensor (decoratedSensor) {
                 ...result
             };
             
-            await upsertSensor(virtualSensor._id, virtualSensor);
+            const virtualId = `${decoratedSensor._id}-${formulaData.date}-reading-${formulaData.measurementType}`;
+            
+            await upsertSensor(virtualId, virtualSensor);
         });
     });
 }
