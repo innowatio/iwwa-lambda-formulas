@@ -2,6 +2,7 @@ import {MongoClient} from "mongodb";
 
 import {
     MONGODB_URL,
+    SENSOR_AGGREGATES_COLLECTION_NAME,
     VIRTUAL_SENSORS_FORMULAS_COLLECTION_NAME
 } from "../config";
 
@@ -14,7 +15,7 @@ export async function getMongoClient () {
     return mongoClientInstance;
 }
 
-export async function upsert (id, virtualSensor) {
+export async function upsertVirtualSensor (id, virtualSensor) {
     const db = await getMongoClient();
     await db.collection(VIRTUAL_SENSORS_FORMULAS_COLLECTION_NAME).update(
         {_id: id},
@@ -23,7 +24,15 @@ export async function upsert (id, virtualSensor) {
     );
 }
 
-export async function find (query) {
+export async function findVirtualSensor (query) {
+    return await find(VIRTUAL_SENSORS_FORMULAS_COLLECTION_NAME, query);
+}
+
+export async function findSensorAggregate (query) {
+    return await find(SENSOR_AGGREGATES_COLLECTION_NAME, query);
+}
+
+async function find (collection, query) {
     const db = await getMongoClient();
-    return await db.collection(VIRTUAL_SENSORS_FORMULAS_COLLECTION_NAME).find(query).toArray();
+    return await db.collection(collection).find(query).toArray();
 }

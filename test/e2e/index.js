@@ -5,7 +5,7 @@ import sinonChai from "sinon-chai";
 chai.use(sinonChai);
 
 import {handler} from "index";
-import {getMongoClient, find} from "services/mongodb";
+import {getMongoClient, findVirtualSensor} from "services/mongodb";
 import {getEventFromObject} from "../mocks";
 import {VIRTUAL_SENSORS_FORMULAS_COLLECTION_NAME} from "config";
 
@@ -74,7 +74,7 @@ describe("On sensor", async () => {
         expect(context.succeed).to.have.been.calledOnce;
         expect(context.fail).to.not.have.been.calledOnce;
 
-        const allSensors = await find({});
+        const allSensors = await findVirtualSensor({});
         expect(allSensors.length).to.equal(0);
     });
 
@@ -115,7 +115,7 @@ describe("On sensor", async () => {
         expect(context.succeed).to.have.been.calledOnce;
         expect(context.fail).to.not.have.been.calledOnce;
 
-        const allSensors = await find({_id: "_id"});
+        const allSensors = await findVirtualSensor({_id: "_id"});
         expect(allSensors.length).to.equal(1);
 
         expect(allSensors[0]).to.deep.equal(expected);
@@ -158,7 +158,7 @@ describe("On sensor", async () => {
         expect(context.succeed).to.have.been.calledOnce;
         expect(context.fail).to.not.have.been.calledOnce;
 
-        const allSensors = await find({_id: "_id"});
+        const allSensors = await findVirtualSensor({_id: "_id"});
         expect(allSensors.length).to.equal(1);
 
         expect(allSensors[0]).to.deep.equal(expected);
@@ -169,10 +169,10 @@ describe("On sensor", async () => {
             ...sensor,
             virtual: true,
             formulas: [{
-                formula: "IT001E00088487",
-                measurementType: ["activeEnergy"],
-                start: "1970-01-01T00:00:00Z",
-                end: "2170-01-01T00:00:00Z"
+                formula: "ANZ01 + ANZ02",
+                measurementType: ["activeEnergy", "temperature"],
+                start: "2016-01-01T00:00:00Z",
+                end: "2016-01-02T00:00:00Z"
             }]
         };
         const event = getEventFromObject({
@@ -186,14 +186,14 @@ describe("On sensor", async () => {
         const expected = {
             _id: "_id",
             formulas: [{
-                formula: "IT001E00088487",
-                measurementType: ["activeEnergy"],
-                variables: ["IT001E00088487"],
-                start: "1970-01-01T00:00:00Z",
-                end: "2170-01-01T00:00:00Z"
+                formula: "ANZ01 + ANZ02",
+                measurementType: ["activeEnergy", "temperature"],
+                variables: ["ANZ01", "ANZ02"],
+                start: "2016-01-01T00:00:00Z",
+                end: "2016-01-02T00:00:00Z"
             }],
-            measurementType: ["activeEnergy"],
-            "variables": ["IT001E00088487"]
+            measurementType: ["activeEnergy", "temperature"],
+            "variables": ["ANZ01", "ANZ02"]
         };
 
         await handler(event, context);
@@ -201,7 +201,7 @@ describe("On sensor", async () => {
         expect(context.succeed).to.have.been.calledOnce;
         expect(context.fail).to.not.have.been.calledOnce;
 
-        const allSensors = await find({_id: "_id"});
+        const allSensors = await findVirtualSensor({_id: "_id"});
         expect(allSensors.length).to.equal(1);
 
         expect(allSensors[0]).to.deep.equal(expected);

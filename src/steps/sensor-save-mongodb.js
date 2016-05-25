@@ -1,9 +1,9 @@
-import {upsert} from "../services/mongodb";
+import {upsertVirtualSensor} from "../services/mongodb";
 
 export async function upsertSensor (decoratedSensor) {
-    await upsert(decoratedSensor._id, {
+    await upsertVirtualSensor(decoratedSensor._id, {
         measurementType: decoratedSensor.measurementType,
         variables: decoratedSensor.variables,
         formulas: decoratedSensor.formulas
     });
-} 
+}
