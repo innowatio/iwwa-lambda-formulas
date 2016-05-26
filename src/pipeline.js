@@ -7,10 +7,10 @@ export default async function pipeline (event) {
 
     log.info(event, "event");
     /*
-    *   Workaround: some events have been incorrectly generated and thus don't
-    *   have an `element` property. When processing said events, just return and
-    *   move on without failing, as failures can block the kinesis stream.
-    */
+     *   Workaround: some events have been incorrectly generated and thus don't
+     *   have an `element` property. When processing said events, just return and
+     *   move on without failing, as failures can block the kinesis stream.
+     */
     var sensor = event.data.element;
     if (!sensor || !event.data.id || !sensor.virtual) {
         return null;

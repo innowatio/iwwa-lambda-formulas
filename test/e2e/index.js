@@ -16,12 +16,14 @@ const sensor = {
     type: "ZTHL",
     virtual: false,
     formulas: [{
-        formula: "IT001E00088487",
+        formula: "ANZ01",
+        variables: ["ANZ01"],
         measurementType: ["activeEnergy", "temperature"],
         start: "1970-01-01T00:00:00Z",
         end: "2170-01-01T00:00:00Z"
     }, {
-        formula: "ANZ01 + ANZ02",
+        formula: "ANZ01 + ANZ-02",
+        variables: ["ANZ01", "ANZ-02"],
         measurementType: ["temperature"],
         start: "2011-01-01T00:00:00.000Z",
         end: "2100-01-01T00:00:00.000Z"
@@ -96,20 +98,20 @@ describe("On sensor", async () => {
         const expected = {
             _id: "VIRTUAL01",
             formulas: [{
-                formula: "IT001E00088487",
+                formula: "ANZ01",
                 measurementType: ["activeEnergy", "temperature"],
-                variables: ["IT001E00088487"],
+                variables: ["ANZ01"],
                 start: "1970-01-01T00:00:00Z",
                 end: "2170-01-01T00:00:00Z"
             }, {
-                formula: "ANZ01 + ANZ02",
+                formula: "ANZ01 + ANZ-02",
                 measurementType: ["temperature"],
-                "variables": ["ANZ01", "ANZ02"],
+                "variables": ["ANZ01", "ANZ-02"],
                 start: "2011-01-01T00:00:00.000Z",
                 end: "2100-01-01T00:00:00.000Z"
             }],
             measurementType: ["activeEnergy", "temperature"],
-            "variables": ["IT001E00088487", "ANZ01", "ANZ02"]
+            "variables": ["ANZ01", "ANZ-02"]
         };
 
         await handler(event, context);
@@ -139,20 +141,20 @@ describe("On sensor", async () => {
         const expected = {
             _id: "VIRTUAL01",
             formulas: [{
-                formula: "IT001E00088487",
+                formula: "ANZ01",
                 measurementType: ["activeEnergy", "temperature"],
-                variables: ["IT001E00088487"],
+                variables: ["ANZ01"],
                 start: "1970-01-01T00:00:00Z",
                 end: "2170-01-01T00:00:00Z"
             }, {
-                "formula": "ANZ01 + ANZ02",
+                "formula": "ANZ01 + ANZ-02",
                 "measurementType": ["temperature"],
-                "variables": ["ANZ01", "ANZ02"],
+                "variables": ["ANZ01", "ANZ-02"],
                 "start": "2011-01-01T00:00:00.000Z",
                 "end": "2100-01-01T00:00:00.000Z"
             }],
             measurementType: ["activeEnergy", "temperature"],
-            "variables": ["IT001E00088487", "ANZ01", "ANZ02"]
+            "variables": ["ANZ01", "ANZ-02"]
         };
 
         await handler(event, context);
@@ -171,8 +173,9 @@ describe("On sensor", async () => {
             ...sensor,
             virtual: true,
             formulas: [{
-                formula: "ANZ01 + ANZ02",
+                formula: "ANZ01 + ANZ-02",
                 measurementType: ["activeEnergy", "temperature"],
+                variables: ["ANZ01", "ANZ-02"],
                 start: "2016-01-01T00:00:00Z",
                 end: "2016-01-02T00:00:00Z"
             }]
@@ -188,14 +191,14 @@ describe("On sensor", async () => {
         const expected = {
             _id: "VIRTUAL01",
             formulas: [{
-                formula: "ANZ01 + ANZ02",
+                formula: "ANZ01 + ANZ-02",
                 measurementType: ["activeEnergy", "temperature"],
-                variables: ["ANZ01", "ANZ02"],
+                variables: ["ANZ01", "ANZ-02"],
                 start: "2016-01-01T00:00:00Z",
                 end: "2016-01-02T00:00:00Z"
             }],
             measurementType: ["activeEnergy", "temperature"],
-            "variables": ["ANZ01", "ANZ02"]
+            "variables": ["ANZ01", "ANZ-02"]
         };
 
         await handler(event, context);

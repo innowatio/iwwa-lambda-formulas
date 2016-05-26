@@ -25,7 +25,7 @@ export async function upsertSensor (id, virtualSensor) {
 
 export async function upsert (collection, id, object) {
     const db = await getMongoClient();
-    await db.collection(collection).update(
+    await db.collection(collection).updateOne(
         {_id: id},
         {$set: object},
         {upsert: true}
