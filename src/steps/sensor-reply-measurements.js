@@ -21,7 +21,7 @@ export async function replySensor (decoratedSensor) {
                 }
             });
             
-            const result = evaluateFormula(aggregate, sensorsData);
+            const result = evaluateFormula(aggregate, sensorsData, aggregate.measurementDelta);
             
             const virtualSensor = {
                 sensorId: decoratedSensor._id,
@@ -76,6 +76,7 @@ export function retrieveSensorIds (formulas) {
         }, {});
         return {
             formula: formula.formula,
+            measurementDelta: formula.measurementDelta ? formula.measurementDelta : 300000,
             measurements
         };
     });

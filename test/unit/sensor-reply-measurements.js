@@ -101,6 +101,7 @@ describe("`retrieveSensorIds` function", () => {
         }];
         const expected = [{
             formula: "ANZ01 + ANZ02",
+            measurementDelta: 300000,
             measurements: [
                 {
                     date: "1970-01-01",
