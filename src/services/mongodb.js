@@ -19,10 +19,6 @@ export async function upsertVirtualSensor (id, virtualSensor) {
     await upsert(VIRTUAL_SENSORS_FORMULAS_COLLECTION_NAME, id, virtualSensor);
 }
 
-export async function upsertSensorAggregate (id, virtualSensor) {
-    await upsert(SENSOR_AGGREGATES_COLLECTION_NAME, id, virtualSensor);
-}
-
 export async function upsert (collection, id, object) {
     const db = await getMongoClient();
     await db.collection(collection).updateOne(
