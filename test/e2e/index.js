@@ -53,7 +53,7 @@ const sensorAggregateAnz = {
     unitOfMeasurement: "kWh",
     measurementValues: "808",
     measurementTimes: "1453940100000"
-}
+};
 
 describe("On sensor", async () => {
 
@@ -193,17 +193,8 @@ describe("On sensor", async () => {
 
     it("receive an already saved virtual sensor and upsert [CASE 1]", async () => {
 
-        await db.collection(SENSOR_AGGREGATES_COLLECTION_NAME).updateOne(
-            {_id: sensorAggregateVirtual._id},
-            {$set: sensorAggregateVirtual},
-            {upsert: true}
-        );
-
-        await db.collection(SENSOR_AGGREGATES_COLLECTION_NAME).updateOne(
-            {_id: sensorAggregateAnz._id},
-            {$set: sensorAggregateAnz},
-            {upsert: true}
-        );
+        await db.collection(SENSOR_AGGREGATES_COLLECTION_NAME).insert(sensorAggregateVirtual);
+        await db.collection(SENSOR_AGGREGATES_COLLECTION_NAME).insert(sensorAggregateAnz);
         
         const virtualSensor = {
             ...sensor,
@@ -236,13 +227,9 @@ describe("On sensor", async () => {
             measurementType: ["activeEnergy", "temperature"],
             "variables": ["ANZ01"]
         };
-        // const prepre = await findSensorAggregate();
-        // console.log("---pre");
-        // console.log(prepre);
-        // console.log("---");
 
         await handler(event, context);
-        
+
         expect(context.succeed).to.have.been.calledOnce;
         expect(context.fail).to.not.have.been.calledOnce;
 
@@ -251,9 +238,6 @@ describe("On sensor", async () => {
 
         const sensorAggregates = await findSensorAggregate();
         expect(sensorAggregates.length).to.be.equal(2);
-        // console.log("---sensorAggregates");
-        // console.log(sensorAggregates);
-        // console.log("---");
 
         expect(virtualSensors[0]).to.deep.equal(expected);
     });
