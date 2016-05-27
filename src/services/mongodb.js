@@ -19,7 +19,7 @@ export async function upsertVirtualSensor (id, virtualSensor) {
     await upsert(VIRTUAL_SENSORS_FORMULAS_COLLECTION_NAME, id, virtualSensor);
 }
 
-export async function upsertSensor (id, virtualSensor) {
+export async function upsertSensorAggregate (id, virtualSensor) {
     await upsert(SENSOR_AGGREGATES_COLLECTION_NAME, id, virtualSensor);
 }
 

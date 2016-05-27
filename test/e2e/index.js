@@ -13,6 +13,7 @@ const sensor = {
     _id: "VIRTUAL01",
     description: "a description",
     name: "Sensore ambientale",
+    unitOfMeasurement: "kWh",
     type: "ZTHL",
     virtual: false,
     formulas: [{
@@ -31,6 +32,28 @@ const sensor = {
     siteId: "site1",
     userId: "user1"
 };
+
+const sensorAggregateVirtual = {
+    _id: "VIRTUAL01-2016-01-01-reading-activeEnergy",
+    day: "2016-01-01",
+    sensorId: "VIRTUAL01",
+    source: "reading",
+    measurementType: "activeEnergy",
+    unitOfMeasurement: "kWh",
+    measurementValues: "4.808",
+    measurementTimes: "1453940100000"
+};
+
+const sensorAggregateAnz = {
+    _id: "ANZ01-2016-01-01-reading-activeEnergy",
+    day: "2016-01-01",
+    sensorId: "ANZ01",
+    source: "reading",
+    measurementType: "activeEnergy",
+    unitOfMeasurement: "kWh",
+    measurementValues: "808",
+    measurementTimes: "1453940100000"
+}
 
 describe("On sensor", async () => {
 
@@ -169,13 +192,26 @@ describe("On sensor", async () => {
     });
 
     it("receive an already saved virtual sensor and upsert [CASE 1]", async () => {
+
+        await db.collection(SENSOR_AGGREGATES_COLLECTION_NAME).updateOne(
+            {_id: sensorAggregateVirtual._id},
+            {$set: sensorAggregateVirtual},
+            {upsert: true}
+        );
+
+        await db.collection(SENSOR_AGGREGATES_COLLECTION_NAME).updateOne(
+            {_id: sensorAggregateAnz._id},
+            {$set: sensorAggregateAnz},
+            {upsert: true}
+        );
+        
         const virtualSensor = {
             ...sensor,
             virtual: true,
             formulas: [{
-                formula: "ANZ01 + ANZ-02",
+                formula: "ANZ01",
                 measurementType: ["activeEnergy", "temperature"],
-                variables: ["ANZ01", "ANZ-02"],
+                variables: ["ANZ01"],
                 start: "2016-01-01T00:00:00Z",
                 end: "2016-01-02T00:00:00Z"
             }]
@@ -191,15 +227,19 @@ describe("On sensor", async () => {
         const expected = {
             _id: "VIRTUAL01",
             formulas: [{
-                formula: "ANZ01 + ANZ-02",
+                formula: "ANZ01",
                 measurementType: ["activeEnergy", "temperature"],
-                variables: ["ANZ01", "ANZ-02"],
+                variables: ["ANZ01"],
                 start: "2016-01-01T00:00:00Z",
                 end: "2016-01-02T00:00:00Z"
             }],
             measurementType: ["activeEnergy", "temperature"],
-            "variables": ["ANZ01", "ANZ-02"]
+            "variables": ["ANZ01"]
         };
+        // const prepre = await findSensorAggregate();
+        // console.log("---pre");
+        // console.log(prepre);
+        // console.log("---");
 
         await handler(event, context);
         
@@ -209,8 +249,11 @@ describe("On sensor", async () => {
         const virtualSensors = await findVirtualSensor({_id: virtualSensor._id});
         expect(virtualSensors.length).to.be.equal(1);
 
-        const sensors = await findSensorAggregate();
-        expect(sensors.length).to.be.equal(4);
+        const sensorAggregates = await findSensorAggregate();
+        expect(sensorAggregates.length).to.be.equal(2);
+        // console.log("---sensorAggregates");
+        // console.log(sensorAggregates);
+        // console.log("---");
 
         expect(virtualSensors[0]).to.deep.equal(expected);
     });

@@ -3,16 +3,17 @@ import moment from "moment";
 
 import {evaluateFormula} from "iwwa-formula-resolver";
 
-import {findVirtualSensor, findSensorAggregate, upsertSensor} from "../services/mongodb";
+import log from "../services/logger";
+import {dispatch} from "../services/dispatcher";
+import {findVirtualSensor, findSensorAggregate} from "../services/mongodb";
 
-export async function replySensor (decoratedSensor) {
+export async function replySensorMeasurements (decoratedSensor) {
     var sensors = await findVirtualSensor({_id: decoratedSensor._id});
     var formulas = sensors.reduce((prev, saved) => {
         return [...prev, ...findFormulasDelta(decoratedSensor, saved)];
     }, []);
     
     const aggregates = retrieveSensorIds(formulas);
-    
     aggregates.forEach(async (aggregate) => {
         aggregate.measurements.forEach(async (formulaData) => {
             const sensorsData = await findSensorAggregate({
@@ -22,18 +23,25 @@ export async function replySensor (decoratedSensor) {
             });
             
             const result = evaluateFormula(aggregate, sensorsData, aggregate.measurementDelta);
-            
-            const virtualSensor = {
+            const recalculatedAggregate = {
                 sensorId: decoratedSensor._id,
                 day: formulaData.date,
                 source: "reading",
+                measurementsUnit: decoratedSensor.unitOfMeasurement,
                 measurementsDeltaInMs: 300000,
                 ...result
             };
             
-            const virtualId = `${decoratedSensor._id}-${formulaData.date}-reading-${formulaData.measurementType}`;
-            
-            await upsertSensor(virtualId, virtualSensor);
+            const splittedValues = recalculatedAggregate.measurementValues.split(",");
+            const splittedTimes = recalculatedAggregate.measurementTimes.split(",");
+            splittedValues.filter(x => x).forEach((value, index) => {
+                const timestamp = splittedTimes[index];
+                
+                const kinesisEvent = createKinesisEvent(recalculatedAggregate, value, timestamp);
+                log.info(kinesisEvent, "dispatch kinesis event");
+                
+                dispatch("element inserted in collection readings", kinesisEvent);
+            });
         });
     });
 }
@@ -81,4 +89,19 @@ export function retrieveSensorIds (formulas) {
         };
     });
     return result;
+}
+
+function createKinesisEvent (aggregate, value, time) {
+    return {
+        element: {
+            sensorId: aggregate.sensorId,
+            date: moment(parseInt(time)).toISOString(),
+            source: aggregate.source,
+            measurements: {
+                type: aggregate,
+                value: value,
+                unitOfMeasurement: aggregate.measurementsUnit
+            }
+        }
+    };
 }

@@ -8,11 +8,13 @@
     "url": "https://github.com/innowatio/iwwa-lambda-formulas.git"
   },
   "dependencies": {
+    "aws-sdk": "^2.3.16",
     "babel-polyfill": "^6.9.0",
     "bunyan": "^1.8.1",
     "dotenv": "^2.0.0",
     "iwwa-formula-resolver": "^1.0.0",
     "kinesis-router": "^1.2.1",
+    "lk-dispatch": "^1.1.0",
     "lodash.flattendeep": "^4.2.0",
     "lodash.isequal": "^4.2.0",
     "lodash.uniq": "^4.3.0",
