@@ -10,7 +10,6 @@ import {getEventFromObject} from "../mocks";
 import {SENSOR_AGGREGATES_COLLECTION_NAME, VIRTUAL_SENSORS_FORMULAS_COLLECTION_NAME} from "config";
 
 const sensor = {
-    _id: "VIRTUAL01",
     description: "a description",
     name: "Sensore ambientale",
     unitOfMeasurement: "kWh",
@@ -92,7 +91,7 @@ describe("On sensor", async () => {
             id: "eventId",
             data: {
                 element: sensor,
-                id: "ANZ01"
+                id: "VIRTUAL01"
             },
             type: "element inserted in collection sensors"
         });
@@ -114,7 +113,7 @@ describe("On sensor", async () => {
             id: "eventId",
             data: {
                 element: virtualSensor,
-                id: "ANZ01"
+                id: "VIRTUAL01"
             },
             type: "element inserted in collection sensors"
         });
@@ -142,7 +141,7 @@ describe("On sensor", async () => {
         expect(context.succeed).to.have.been.calledOnce;
         expect(context.fail).to.not.have.been.calledOnce;
 
-        const allSensors = await findVirtualSensor({_id: virtualSensor._id});
+        const allSensors = await findVirtualSensor({_id: "VIRTUAL01"});
         expect(allSensors.length).to.equal(1);
 
         expect(allSensors[0]).to.deep.equal(expected);
@@ -157,7 +156,7 @@ describe("On sensor", async () => {
             id: "eventId",
             data: {
                 element: virtualSensor,
-                id: "ANZ01"
+                id: "VIRTUAL01"
             },
             type: "element inserted in collection sensors"
         });
@@ -185,7 +184,7 @@ describe("On sensor", async () => {
         expect(context.succeed).to.have.been.calledOnce;
         expect(context.fail).to.not.have.been.calledOnce;
 
-        const allSensors = await findVirtualSensor({_id: virtualSensor._id});
+        const allSensors = await findVirtualSensor({_id: "VIRTUAL01"});
         expect(allSensors.length).to.equal(1);
 
         expect(allSensors[0]).to.deep.equal(expected);
@@ -211,7 +210,7 @@ describe("On sensor", async () => {
             id: "eventId",
             data: {
                 element: virtualSensor,
-                id: "ANZ01"
+                id: "VIRTUAL01"
             },
             type: "element inserted in collection sensors"
         });
@@ -233,7 +232,7 @@ describe("On sensor", async () => {
         expect(context.succeed).to.have.been.calledOnce;
         expect(context.fail).to.not.have.been.calledOnce;
 
-        const virtualSensors = await findVirtualSensor({_id: virtualSensor._id});
+        const virtualSensors = await findVirtualSensor({_id: "VIRTUAL01"});
         expect(virtualSensors.length).to.be.equal(1);
 
         const sensorAggregates = await findSensorAggregate();

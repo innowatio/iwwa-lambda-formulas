@@ -22,8 +22,8 @@ export default async function pipeline (event) {
     const decoratedSensor = decorateSensor(sensor);
 
     await replySensorMeasurements(decoratedSensor);
-    
-    await upsertSensorFormulas(decoratedSensor);
+
+    await upsertSensorFormulas(event.data.id, decoratedSensor);
     
     return null;
 }
