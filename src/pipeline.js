@@ -12,7 +12,10 @@ export default async function pipeline (event) {
      *   move on without failing, as failures can block the kinesis stream.
      */
     const sensor = event.data.element;
-    if (!sensor || !event.data.id || !sensor.virtual) {
+    if (!event.data.id 
+        || !sensor 
+        || !sensor.virtual
+        || !sensor.formulas) {
         return null;
     }
     
