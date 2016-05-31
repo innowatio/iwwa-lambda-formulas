@@ -12,7 +12,7 @@
     "babel-polyfill": "^6.9.0",
     "bunyan": "^1.8.1",
     "dotenv": "^2.0.0",
-    "iwwa-formula-resolver": "^1.0.0",
+    "iwwa-formula-resolver": "^1.1.2",
     "kinesis-router": "^1.2.1",
     "lk-dispatch": "^1.1.0",
     "lodash.flattendeep": "^4.2.0",
