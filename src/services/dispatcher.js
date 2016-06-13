@@ -20,5 +20,6 @@ function getInstance () {
 }
 
 export function dispatch (eventType, eventData, eventOptions) {
-    getInstance().dispatch(eventType, eventData, eventOptions);
+    const dispatch = getInstance();
+    dispatch(eventType, eventData, eventOptions);
 }
