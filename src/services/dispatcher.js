@@ -19,7 +19,7 @@ function getInstance () {
     return dispatcherInstance;
 }
 
-export function dispatch (eventType, eventData, eventOptions) {
+export async function dispatch (eventType, eventData, eventOptions) {
     const dispatch = getInstance();
-    dispatch(eventType, eventData, eventOptions);
+    await dispatch(eventType, eventData, eventOptions);
 }

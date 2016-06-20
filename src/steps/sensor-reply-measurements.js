@@ -1,5 +1,6 @@
 import isequal from "lodash.isequal";
 import moment from "moment";
+import {map} from "bluebird";
 
 import {evaluateFormula} from "iwwa-formula-resolver";
 
@@ -32,15 +33,16 @@ export async function replySensorMeasurements (decoratedSensor) {
                 ...result
             };
             
-            const splittedValues = recalculatedAggregate.measurementValues.split(",");
-            const splittedTimes = recalculatedAggregate.measurementTimes.split(",");
-            splittedValues.filter(x => x).forEach((value, index) => {
+            const splittedValues = recalculatedAggregate.measurementValues.split(",").filter(x => x);
+            const splittedTimes = recalculatedAggregate.measurementTimes.split(",").filter(x => x);
+
+            await map(splittedValues, async (value, index) => {
                 const timestamp = splittedTimes[index];
                 
                 const kinesisEvent = createKinesisEvent(recalculatedAggregate, value, timestamp);
                 log.info(kinesisEvent, "dispatch kinesis event");
                 
-                dispatch("element inserted in collection readings", kinesisEvent);
+                await dispatch("element inserted in collection readings", kinesisEvent);
             });
         });
     });

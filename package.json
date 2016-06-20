@@ -10,6 +10,7 @@
   "dependencies": {
     "aws-sdk": "^2.3.16",
     "babel-polyfill": "^6.9.0",
+    "bluebird": "^3.4.1",
     "bunyan": "^1.8.1",
     "dotenv": "^2.0.0",
     "iwwa-formula-resolver": "^1.1.2",
