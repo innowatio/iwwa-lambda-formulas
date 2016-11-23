@@ -7,14 +7,14 @@ export function retriveFormulaMeasurementType (formulas) {
     }))).filter(x => x);
 }
 
-export function decorateSensor (sensor) {
-    var decoratedSensor = {
-        ...sensor
+export function decorateSensorFormula (sensorFormula) {
+    var decoratedSensorFormula = {
+        ...sensorFormula
     };
-    decoratedSensor.measurementType = retriveFormulaMeasurementType(sensor.formulas);
-    decoratedSensor.formulas = sensor.formulas;
-    decoratedSensor.variables = uniq(sensor.formulas.reduce((prev, formula) => {
+    decoratedSensorFormula.measurementType = retriveFormulaMeasurementType(sensorFormula.formulas);
+    decoratedSensorFormula.formulas = sensorFormula.formulas;
+    decoratedSensorFormula.variables = uniq(sensorFormula.formulas.reduce((prev, formula) => {
         return [...prev, ...formula.variables];
     }, []));
-    return decoratedSensor;
+    return decoratedSensorFormula;
 }

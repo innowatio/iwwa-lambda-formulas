@@ -1,7 +1,7 @@
 import log from "./services/logger";
 import {upsertSensorFormulas} from "./steps/sensor-save-mongodb";
 import {replySensorMeasurements} from "./steps/sensor-reply-measurements";
-import {decorateSensor} from "./steps/sensor-formulas-decorator";
+import {decorateSensorFormula} from "./steps/sensor-formulas-decorator";
 
 export default async function pipeline (event) {
 
@@ -18,12 +18,12 @@ export default async function pipeline (event) {
         || !sensor.formulas) {
         return null;
     }
-    
-    const decoratedSensor = decorateSensor(sensor);
 
-    await replySensorMeasurements(decoratedSensor);
+    const decoratedSensorFormula = decorateSensorFormula(sensor);
 
-    await upsertSensorFormulas(event.data.id, decoratedSensor);
-    
+    await replySensorMeasurements(decoratedSensorFormula);
+
+    await upsertSensorFormulas(event.data.id, decoratedSensorFormula);
+
     return null;
 }
