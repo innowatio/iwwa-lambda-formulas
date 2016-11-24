@@ -1,3 +1,9 @@
 import bunyan from "bunyan";
 
-export default bunyan.createLogger({name: "iwwa-lambda-formulas"});
+import {LOG_LEVEL} from "../config";
+
+const logger = bunyan.createLogger({name: "iwwa-lambda-formulas"});
+
+logger.level(process.env.NODE_ENV === "test" ? "fatal" : LOG_LEVEL);
+
+export default logger;
