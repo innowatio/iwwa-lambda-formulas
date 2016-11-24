@@ -8,6 +8,11 @@ import {
 
 var dispatcherInstance;
 
+export function setInstance(instance) {
+    dispatcherInstance = instance;
+    return dispatcherInstance;
+}
+
 function getInstance () {
     if (!dispatcherInstance) {
         dispatcherInstance = getDispatch({
@@ -19,7 +24,7 @@ function getInstance () {
     return dispatcherInstance;
 }
 
-export async function dispatch (eventType, eventData, eventOptions) {
+export async function dispatch(eventType, eventData, eventOptions = {}) {
     const dispatch = getInstance();
     await dispatch(eventType, eventData, eventOptions);
 }

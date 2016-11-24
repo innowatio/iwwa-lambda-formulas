@@ -5,7 +5,7 @@ import {decorateSensorFormula} from "./steps/sensor-formulas-decorator";
 
 export default async function pipeline (event) {
 
-    log.info(event, "event");
+    log.debug({event});
     /*
      *   Workaround: some events have been incorrectly generated and thus don't
      *   have an `element` property. When processing said events, just return and

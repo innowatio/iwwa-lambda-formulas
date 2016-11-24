@@ -1,6 +1,6 @@
 import {expect} from "chai";
 
-import {findFormulasDelta, retrieveSensorIds} from "steps/sensor-reply-measurements";
+import {findFormulasDelta, retrieveSensorData} from "steps/sensor-reply-measurements";
 
 describe("`findFormulasDelta` function", () => {
     it("return the correct diff of formulas [CASE 0]", async () => {
@@ -101,7 +101,6 @@ describe("`retrieveSensorIds` function", () => {
         }];
         const expected = [{
             formula: "ANZ01 + ANZ02",
-            measurementDelta: 300000,
             measurements: [
                 {
                     date: "1970-01-01",
@@ -148,7 +147,7 @@ describe("`retrieveSensorIds` function", () => {
                 }
             ]
         }];
-        const result = retrieveSensorIds(formulas);
+        const result = retrieveSensorData(formulas);
         expect(result).to.deep.equal(expected);
     });
 });

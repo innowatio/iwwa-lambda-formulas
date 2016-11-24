@@ -3,7 +3,7 @@ import {upsertVirtualSensor} from "../services/mongodb";
 
 
 export async function upsertSensorFormulas (id, decoratedSensor) {
-    log.info({decoratedSensor});
+    log.debug({decoratedSensor});
     await upsertVirtualSensor(id, {
         measurementType: decoratedSensor.measurementType,
         variables: decoratedSensor.variables,
