@@ -293,7 +293,7 @@ describe("On sensor", async () => {
         });
     });
 
-    it("receive an already saved virtual sensor and upsert [CASE 3]", async () => {
+    it("receive an already saved virtual sensor and upsert [CASE 3: changed formula]", async () => {
 
         const dispatcher = setInstance(sinon.spy());
 
@@ -304,6 +304,7 @@ describe("On sensor", async () => {
             virtual: true,
             formulas: [{
                 formula: "ANZ01+ANZ02",
+                aggregationType: "mean",
                 measurementType: ["temperature"],
                 variables: ["ANZ01", "ANZ02"],
                 start: "2016-01-01T00:00:00Z",
@@ -324,6 +325,141 @@ describe("On sensor", async () => {
             _id: "VIRTUAL01",
             formulas: [{
                 formula: "ANZ01+ANZ02",
+                aggregationType: "mean",
+                measurementType: ["temperature"],
+                variables: ["ANZ01", "ANZ02"],
+                start: "2016-01-01T00:00:00Z",
+                end: "2016-01-02T00:00:00Z"
+            }],
+            measurementType: ["temperature"],
+            "variables": ["ANZ01", "ANZ02"]
+        };
+
+        await handler(event, context);
+
+        expect(context.succeed).to.have.been.calledOnce;
+        expect(context.fail).to.not.have.been.calledOnce;
+
+        const sensorAggregates = await findSensorAggregate();
+        expect(sensorAggregates.length).to.be.equal(3);
+
+        const virtualSensors = await findVirtualSensor({_id: "VIRTUAL01"});
+
+        expect(virtualSensors[0]).to.deep.equal(expected);
+
+        expect(dispatcher.callCount).to.be.equal(6);
+
+        expect(dispatcher.firstCall).to.have.been.calledWith("element inserted in collection readings", {
+            element: {
+                date: "2016-01-28T00:15:00.000Z",
+                measurements: [{
+                    type: "temperature",
+                    unitOfMeasurement: "°C",
+                    value: "808"
+                }],
+                sensorId: "ANZ01",
+                source: "reading"
+            }
+        });
+
+        expect(dispatcher.secondCall).to.have.been.calledWith("element inserted in collection readings", {
+            element: {
+                date: "2016-01-28T00:20:00.000Z",
+                measurements: [{
+                    type: "temperature",
+                    unitOfMeasurement: "°C",
+                    value: "600"
+                }],
+                sensorId: "ANZ01",
+                source: "reading"
+            }
+        });
+
+        expect(dispatcher.thirdCall).to.have.been.calledWith("element inserted in collection readings", {
+            element: {
+                date: "2016-01-28T00:25:00.000Z",
+                measurements: [{
+                    type: "temperature",
+                    unitOfMeasurement: "°C",
+                    value: "500"
+                }],
+                sensorId: "ANZ01",
+                source: "reading"
+            }
+        });
+
+        expect(dispatcher.getCall(3)).to.have.been.calledWith("element inserted in collection readings", {
+            element: {
+                date: "2016-01-28T00:15:00.000Z",
+                measurements: [{
+                    type: "temperature",
+                    unitOfMeasurement: "°C",
+                    value: "432"
+                }],
+                sensorId: "ANZ02",
+                source: "reading"
+            }
+        });
+
+        expect(dispatcher.getCall(4)).to.have.been.calledWith("element inserted in collection readings", {
+            element: {
+                date: "2016-01-28T00:20:00.000Z",
+                measurements: [{
+                    type: "temperature",
+                    unitOfMeasurement: "°C",
+                    value: "354"
+                }],
+                sensorId: "ANZ02",
+                source: "reading"
+            }
+        });
+
+        expect(dispatcher.getCall(5)).to.have.been.calledWith("element inserted in collection readings", {
+            element: {
+                date: "2016-01-28T00:25:00.000Z",
+                measurements: [{
+                    type: "temperature",
+                    unitOfMeasurement: "°C",
+                    value: "451"
+                }],
+                sensorId: "ANZ02",
+                source: "reading"
+            }
+        });
+
+    });
+
+    it("receive an already saved virtual sensor and upsert [CASE 4: changed formula aggregationType]", async () => {
+
+        const dispatcher = setInstance(sinon.spy());
+
+        const virtualSensor = {
+            ...sensor,
+            virtual: true,
+            formulas: [{
+                formula: "ANZ01+ANZ02",
+                aggregationType: "sum",
+                measurementType: ["temperature"],
+                variables: ["ANZ01", "ANZ02"],
+                start: "2016-01-01T00:00:00Z",
+                end: "2016-01-02T00:00:00Z"
+            }]
+        };
+
+        const event = getEventFromObject({
+            id: "eventId",
+            data: {
+                element: virtualSensor,
+                id: "VIRTUAL01"
+            },
+            type: "element inserted in collection sensors"
+        });
+
+        const expected = {
+            _id: "VIRTUAL01",
+            formulas: [{
+                formula: "ANZ01+ANZ02",
+                aggregationType: "sum",
                 measurementType: ["temperature"],
                 variables: ["ANZ01", "ANZ02"],
                 start: "2016-01-01T00:00:00Z",

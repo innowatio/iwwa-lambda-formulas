@@ -48,7 +48,8 @@ export function findFormulasDelta (sensor, sensorCompare) {
             return x.formula === formula.formula &&
                 isequal(x.measurementType.sort(), formula.measurementType.sort()) &&
                 x.start === formula.start &&
-                x.end === formula.end;
+                x.end === formula.end &&
+                x.aggregationType === formula.aggregationType;
         });
         return finded ? [...prev] : [...prev, formula];
     }, []);
