@@ -11,7 +11,6 @@ import {getEventFromObject} from "../mocks";
 import {SENSOR_AGGREGATES_COLLECTION_NAME, VIRTUAL_SENSORS_FORMULAS_COLLECTION_NAME} from "config";
 
 const sensor = {
-    _id: "VIRTUAL01",
     description: "A description",
     name: "Sito with sensors",
     virtual: false,

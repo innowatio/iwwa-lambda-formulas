@@ -19,7 +19,10 @@ export default async function pipeline (event) {
     }
     log.info({event});
 
-    const decoratedSensorFormula = decorateSensorFormula(sensor);
+    const decoratedSensorFormula = decorateSensorFormula({
+        ...sensor,
+        id: event.data.id
+    });
 
     await replySensorMeasurements(decoratedSensorFormula);
 

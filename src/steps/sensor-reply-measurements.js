@@ -9,7 +9,7 @@ import {findVirtualSensor, findSensorAggregate} from "../services/mongodb";
 export async function replySensorMeasurements (decoratedSensor) {
     log.info({decoratedSensor});
 
-    var sensors = await findVirtualSensor({ _id: decoratedSensor._id });
+    var sensors = await findVirtualSensor({_id: decoratedSensor.id});
     log.info({sensors});
 
     var formulas = sensors.reduce((prev, saved) => {
