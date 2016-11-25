@@ -109,7 +109,7 @@ describe("On sensor", async () => {
         expect(context.fail).to.not.have.been.calledOnce;
 
         const allSensors = await findVirtualSensor({});
-        expect(allSensors.length).to.equal(0);
+        expect(allSensors).to.equal(null);
     });
 
     it("receive a new virtual sensor and upsert", async () => {
@@ -149,10 +149,8 @@ describe("On sensor", async () => {
         expect(context.succeed).to.have.been.calledOnce;
         expect(context.fail).to.not.have.been.calledOnce;
 
-        const allSensors = await findVirtualSensor({_id: "VIRTUAL01"});
-        expect(allSensors.length).to.equal(1);
-
-        expect(allSensors[0]).to.deep.equal(expected);
+        const savedSensor = await findVirtualSensor({_id: "VIRTUAL01"});
+        expect(savedSensor).to.deep.equal(expected);
     });
 
     it("receive an already saved virtual sensor and upsert [CASO 0]", async () => {
@@ -192,10 +190,8 @@ describe("On sensor", async () => {
         expect(context.succeed).to.have.been.calledOnce;
         expect(context.fail).to.not.have.been.calledOnce;
 
-        const allSensors = await findVirtualSensor({_id: "VIRTUAL01"});
-        expect(allSensors.length).to.equal(1);
-
-        expect(allSensors[0]).to.deep.equal(expected);
+        const savedSensor = await findVirtualSensor({_id: "VIRTUAL01"});
+        expect(savedSensor).to.deep.equal(expected);
     });
 
     it("receive an already saved virtual sensor and upsert [CASE 1]", async () => {
@@ -212,8 +208,8 @@ describe("On sensor", async () => {
                 formula: "ANZ01",
                 measurementType: ["activeEnergy", "temperature"],
                 variables: ["ANZ01"],
-                start: "2016-01-01T00:00:00Z",
-                end: "2016-01-02T00:00:00Z"
+                start: "2000-01-01T00:00:00Z",
+                end: "2020-01-02T00:00:00Z"
             }]
         };
         const event = getEventFromObject({
@@ -230,8 +226,8 @@ describe("On sensor", async () => {
                 formula: "ANZ01",
                 measurementType: ["activeEnergy", "temperature"],
                 variables: ["ANZ01"],
-                start: "2016-01-01T00:00:00Z",
-                end: "2016-01-02T00:00:00Z"
+                start: "2000-01-01T00:00:00Z",
+                end: "2020-01-02T00:00:00Z"
             }],
             measurementType: ["activeEnergy", "temperature"],
             "variables": ["ANZ01"]
@@ -243,14 +239,12 @@ describe("On sensor", async () => {
         expect(context.fail).to.not.have.been.calledOnce;
 
         const virtualSensors = await findVirtualSensor({_id: "VIRTUAL01"});
-        expect(virtualSensors.length).to.be.equal(1);
+        expect(virtualSensors).to.deep.equal(expected);
 
         const sensorAggregates = await findSensorAggregate();
         expect(sensorAggregates.length).to.be.equal(2);
 
-        expect(virtualSensors[0]).to.deep.equal(expected);
-
-        expect(dispatcher).to.have.been.calledTrice;
+        expect(dispatcher.callCount).to.be.equal(3);
 
         expect(dispatcher.firstCall).to.have.been.calledWith("element inserted in collection readings", {
             element: {
@@ -343,8 +337,7 @@ describe("On sensor", async () => {
         expect(sensorAggregates.length).to.be.equal(3);
 
         const virtualSensors = await findVirtualSensor({_id: "VIRTUAL01"});
-
-        expect(virtualSensors[0]).to.deep.equal(expected);
+        expect(virtualSensors).to.deep.equal(expected);
 
         expect(dispatcher.callCount).to.be.equal(6);
 
@@ -426,7 +419,7 @@ describe("On sensor", async () => {
             }
         });
 
-    });
+    }).timeout(0);
 
     it("receive an already saved virtual sensor and upsert [CASE 3: changed formula aggregationType]", async () => {
 
@@ -440,8 +433,8 @@ describe("On sensor", async () => {
                 aggregationType: "sum",
                 measurementType: ["temperature"],
                 variables: ["ANZ01", "ANZ02"],
-                start: "2016-01-01T00:00:00Z",
-                end: "2016-01-02T00:00:00Z"
+                start: "2005-01-01T00:00:00Z",
+                end: "2100-01-02T00:00:00Z"
             }]
         };
 
@@ -461,8 +454,8 @@ describe("On sensor", async () => {
                 aggregationType: "sum",
                 measurementType: ["temperature"],
                 variables: ["ANZ01", "ANZ02"],
-                start: "2016-01-01T00:00:00Z",
-                end: "2016-01-02T00:00:00Z"
+                start: "2005-01-01T00:00:00Z",
+                end: "2100-01-02T00:00:00Z"
             }],
             measurementType: ["temperature"],
             "variables": ["ANZ01", "ANZ02"]
@@ -478,7 +471,7 @@ describe("On sensor", async () => {
 
         const virtualSensors = await findVirtualSensor({_id: "VIRTUAL01"});
 
-        expect(virtualSensors[0]).to.deep.equal(expected);
+        expect(virtualSensors).to.deep.equal(expected);
 
         expect(dispatcher.callCount).to.be.equal(6);
 
@@ -560,5 +553,5 @@ describe("On sensor", async () => {
             }
         });
 
-    });
+    }).timeout(0);
 });

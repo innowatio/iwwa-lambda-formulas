@@ -29,7 +29,7 @@ export async function upsert (collection, id, object) {
 }
 
 export async function findVirtualSensor (query) {
-    return await find(VIRTUAL_SENSORS_FORMULAS_COLLECTION_NAME, query);
+    return await findOne(VIRTUAL_SENSORS_FORMULAS_COLLECTION_NAME, query);
 }
 
 export async function findSensorAggregate (query) {
@@ -39,4 +39,9 @@ export async function findSensorAggregate (query) {
 async function find (collection, query) {
     const db = await getMongoClient();
     return await db.collection(collection).find(query).toArray();
+}
+
+async function findOne (collection, query) {
+    const db = await getMongoClient();
+    return await db.collection(collection).findOne(query);
 }
