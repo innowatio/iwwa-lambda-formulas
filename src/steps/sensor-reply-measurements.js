@@ -28,7 +28,10 @@ export async function replySensorMeasurements (decoratedSensor) {
                 }
             });
 
+            log.info({sensorsData});
+
             await map(sensorsData, async (sensorData) => {
+
                 const splittedValues = sensorData.measurementValues.split(",").filter(x => x);
                 const splittedTimes = sensorData.measurementTimes.split(",").filter(x => x);
 
@@ -36,7 +39,6 @@ export async function replySensorMeasurements (decoratedSensor) {
                     const timestamp = splittedTimes[index];
 
                     const kinesisEvent = createKinesisEvent(sensorData, value, timestamp);
-                    log.info(kinesisEvent.element);
 
                     await dispatch("element inserted in collection readings", kinesisEvent);
                 }, {concurrency: 0});
