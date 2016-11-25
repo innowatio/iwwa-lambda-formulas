@@ -10,23 +10,26 @@ export default async function pipeline (event) {
      *   have an `element` property. When processing said events, just return and
      *   move on without failing, as failures can block the kinesis stream.
      */
-    const sensor = event.data.element;
-    if (!event.data.id 
-        || !sensor 
-        || !sensor.virtual
-        || !sensor.formulas) {
-        return null;
+    try {
+        const sensor = event.data.element;
+        if (!event.data.id 
+            || !sensor 
+            || !sensor.virtual
+            || !sensor.formulas) {
+            return null;
+        }
+        log.info({event});
+
+        const decoratedSensorFormula = decorateSensorFormula({
+            ...sensor,
+            id: event.data.id
+        });
+
+        await replySensorMeasurements(decoratedSensorFormula);
+
+        await upsertSensorFormulas(event.data.id, decoratedSensorFormula);
+    } catch (error) {
+        log.fatal(error);
+        throw error;
     }
-    log.info({event});
-
-    const decoratedSensorFormula = decorateSensorFormula({
-        ...sensor,
-        id: event.data.id
-    });
-
-    await replySensorMeasurements(decoratedSensorFormula);
-
-    await upsertSensorFormulas(event.data.id, decoratedSensorFormula);
-
-    return null;
 }
