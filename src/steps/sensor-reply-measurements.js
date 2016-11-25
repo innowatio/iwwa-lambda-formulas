@@ -7,13 +7,21 @@ import {dispatch} from "../services/dispatcher";
 import {findVirtualSensor, findSensorAggregate} from "../services/mongodb";
 
 export async function replySensorMeasurements (decoratedSensor) {
-    var sensors = await findVirtualSensor({_id: decoratedSensor._id});
+    log.info({decoratedSensor});
+
+    var sensors = await findVirtualSensor({ _id: decoratedSensor._id });
+    log.info({sensors});
+
     var formulas = sensors.reduce((prev, saved) => {
         return [...prev, ...findFormulasDelta(decoratedSensor, saved)];
     }, []);
+    log.info({formulas});
 
     const aggregates = retrieveSensorData(formulas);
     await map(aggregates, async (aggregate) => {
+
+        log.info({aggregate});
+
         await map(aggregate.measurements, async (formulaData) => {
 
             const sensorsData = await findSensorAggregate({
@@ -30,8 +38,8 @@ export async function replySensorMeasurements (decoratedSensor) {
                 await map(splittedValues, async (value, index) => {
                     const timestamp = splittedTimes[index];
 
-                    const kinesisEvent = createKinesisEvent(sensorData, value, timestamp);
                     log.info({kinesisEvent});
+                    const kinesisEvent = createKinesisEvent(sensorData, value, timestamp);
 
                     await dispatch("element inserted in collection readings", kinesisEvent);
                 });
@@ -41,6 +49,10 @@ export async function replySensorMeasurements (decoratedSensor) {
 }
 
 export function findFormulasDelta (sensor, sensorCompare) {
+    log.info({
+        sensor,
+        sensorCompare
+    });
     const sensor1 = sensor;
     const sensor2 = sensorCompare;
     var formulaDelta = sensor1.formulas.reduce((prev, formula) => {
