@@ -38,21 +38,17 @@ export async function replySensorMeasurements (decoratedSensor) {
                 await map(splittedValues, async (value, index) => {
                     const timestamp = splittedTimes[index];
 
-                    log.info({kinesisEvent});
                     const kinesisEvent = createKinesisEvent(sensorData, value, timestamp);
+                    log.info(kinesisEvent.element);
 
                     await dispatch("element inserted in collection readings", kinesisEvent);
-                });
+                }, {concurrency: 0});
             });
         });
     });
 }
 
 export function findFormulasDelta (sensor, sensorCompare) {
-    log.info({
-        sensor,
-        sensorCompare
-    });
     const sensor1 = sensor;
     const sensor2 = sensorCompare;
     var formulaDelta = sensor1.formulas.reduce((prev, formula) => {

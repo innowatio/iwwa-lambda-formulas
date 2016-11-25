@@ -292,7 +292,7 @@ describe("On sensor", async () => {
         });
     });
 
-    it("receive an already saved virtual sensor and upsert [CASE 3: changed formula]", async () => {
+    it("receive an already saved virtual sensor and upsert [CASE 2: changed formula]", async () => {
 
         const dispatcher = setInstance(sinon.spy());
 
@@ -428,7 +428,7 @@ describe("On sensor", async () => {
 
     });
 
-    it("receive an already saved virtual sensor and upsert [CASE 4: changed formula aggregationType]", async () => {
+    it("receive an already saved virtual sensor and upsert [CASE 3: changed formula aggregationType]", async () => {
 
         const dispatcher = setInstance(sinon.spy());
 
