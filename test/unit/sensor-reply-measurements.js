@@ -114,6 +114,6 @@ describe("`retrieveSensorIds` function", () => {
         }];
         const result = retrieveSensorData(formulas);
         expect(result).to.deep.equal(expected);
-    }).timeout(0);
+    });
 });
 
