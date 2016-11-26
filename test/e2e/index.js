@@ -252,7 +252,7 @@ describe("On sensor", async () => {
                 measurements: [{
                     type: "temperature",
                     unitOfMeasurement: "°C",
-                    value: "808"
+                    value: 808
                 }],
                 sensorId: "ANZ01",
                 source: "reading"
@@ -265,7 +265,7 @@ describe("On sensor", async () => {
                 measurements: [{
                     type: "temperature",
                     unitOfMeasurement: "°C",
-                    value: "600"
+                    value: 600
                 }],
                 sensorId: "ANZ01",
                 source: "reading"
@@ -278,7 +278,7 @@ describe("On sensor", async () => {
                 measurements: [{
                     type: "temperature",
                     unitOfMeasurement: "°C",
-                    value: "500"
+                    value: 500
                 }],
                 sensorId: "ANZ01",
                 source: "reading"
@@ -347,7 +347,7 @@ describe("On sensor", async () => {
                 measurements: [{
                     type: "temperature",
                     unitOfMeasurement: "°C",
-                    value: "808"
+                    value: 808
                 }],
                 sensorId: "ANZ01",
                 source: "reading"
@@ -360,7 +360,7 @@ describe("On sensor", async () => {
                 measurements: [{
                     type: "temperature",
                     unitOfMeasurement: "°C",
-                    value: "600"
+                    value: 600
                 }],
                 sensorId: "ANZ01",
                 source: "reading"
@@ -373,7 +373,7 @@ describe("On sensor", async () => {
                 measurements: [{
                     type: "temperature",
                     unitOfMeasurement: "°C",
-                    value: "500"
+                    value: 500
                 }],
                 sensorId: "ANZ01",
                 source: "reading"
@@ -386,7 +386,7 @@ describe("On sensor", async () => {
                 measurements: [{
                     type: "temperature",
                     unitOfMeasurement: "°C",
-                    value: "432"
+                    value: 432
                 }],
                 sensorId: "ANZ02",
                 source: "reading"
@@ -399,7 +399,7 @@ describe("On sensor", async () => {
                 measurements: [{
                     type: "temperature",
                     unitOfMeasurement: "°C",
-                    value: "354"
+                    value: 354
                 }],
                 sensorId: "ANZ02",
                 source: "reading"
@@ -412,14 +412,14 @@ describe("On sensor", async () => {
                 measurements: [{
                     type: "temperature",
                     unitOfMeasurement: "°C",
-                    value: "451"
+                    value: 451
                 }],
                 sensorId: "ANZ02",
                 source: "reading"
             }
         });
 
-    }).timeout(0);
+    });
 
     it("receive an already saved virtual sensor and upsert [CASE 3: changed formula aggregationType]", async () => {
 
@@ -434,7 +434,7 @@ describe("On sensor", async () => {
                 measurementType: ["temperature"],
                 variables: ["ANZ01", "ANZ02"],
                 start: "2005-01-01T00:00:00Z",
-                end: "2100-01-02T00:00:00Z"
+                end: "2050-01-02T00:00:00Z"
             }]
         };
 
@@ -455,7 +455,7 @@ describe("On sensor", async () => {
                 measurementType: ["temperature"],
                 variables: ["ANZ01", "ANZ02"],
                 start: "2005-01-01T00:00:00Z",
-                end: "2100-01-02T00:00:00Z"
+                end: "2050-01-02T00:00:00Z"
             }],
             measurementType: ["temperature"],
             "variables": ["ANZ01", "ANZ02"]
@@ -481,7 +481,7 @@ describe("On sensor", async () => {
                 measurements: [{
                     type: "temperature",
                     unitOfMeasurement: "°C",
-                    value: "808"
+                    value: 808
                 }],
                 sensorId: "ANZ01",
                 source: "reading"
@@ -494,7 +494,7 @@ describe("On sensor", async () => {
                 measurements: [{
                     type: "temperature",
                     unitOfMeasurement: "°C",
-                    value: "600"
+                    value: 600
                 }],
                 sensorId: "ANZ01",
                 source: "reading"
@@ -507,7 +507,7 @@ describe("On sensor", async () => {
                 measurements: [{
                     type: "temperature",
                     unitOfMeasurement: "°C",
-                    value: "500"
+                    value: 500
                 }],
                 sensorId: "ANZ01",
                 source: "reading"
@@ -520,7 +520,7 @@ describe("On sensor", async () => {
                 measurements: [{
                     type: "temperature",
                     unitOfMeasurement: "°C",
-                    value: "432"
+                    value: 432
                 }],
                 sensorId: "ANZ02",
                 source: "reading"
@@ -533,7 +533,7 @@ describe("On sensor", async () => {
                 measurements: [{
                     type: "temperature",
                     unitOfMeasurement: "°C",
-                    value: "354"
+                    value: 354
                 }],
                 sensorId: "ANZ02",
                 source: "reading"
@@ -546,12 +546,12 @@ describe("On sensor", async () => {
                 measurements: [{
                     type: "temperature",
                     unitOfMeasurement: "°C",
-                    value: "451"
+                    value: 451
                 }],
                 sensorId: "ANZ02",
                 source: "reading"
             }
         });
 
-    }).timeout(0);
+    });
 });

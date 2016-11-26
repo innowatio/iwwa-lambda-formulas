@@ -108,7 +108,7 @@ function createKinesisEvent (aggregate, value, time) {
             source: aggregate.source,
             measurements: [{
                 type: aggregate.measurementType,
-                value: value,
+                value: parseFloat(value),
                 unitOfMeasurement: aggregate.unitOfMeasurement
             }]
         }
