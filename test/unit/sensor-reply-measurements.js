@@ -97,18 +97,14 @@ describe("`retrieveSensorIds` function", () => {
             measurementType: ["activeEnergy", "temperature"],
             variables: ["ANZ01", "ANZ02"],
             start: "2016-01-01T00:00:00Z",
-            end: "2016-01-03T00:00:00Z"
+            end: "2016-01-01T00:04:00Z"
         }];
         const expected = [{
             formula: "ANZ01 + ANZ02",
             ids: [
-                "ANZ01-2016-01-02-reading-activeEnergy",
                 "ANZ01-2016-01-01-reading-activeEnergy",
-                "ANZ01-2016-01-02-reading-temperature",
                 "ANZ01-2016-01-01-reading-temperature",
-                "ANZ02-2016-01-02-reading-activeEnergy",
                 "ANZ02-2016-01-01-reading-activeEnergy",
-                "ANZ02-2016-01-02-reading-temperature",
                 "ANZ02-2016-01-01-reading-temperature",
             ]
         }];

@@ -68,7 +68,7 @@ export function retrieveSensorData (formulas) {
         const end = moment.utc(formula.end);
         var start = moment.utc(formula.start);
 
-        var days = moment.duration(end.valueOf() - start.valueOf()).asDays();
+        var days = Math.ceil((moment.duration(end.valueOf() - start.valueOf()).asDays()));
 
         var dates = [];
         while (days >= 0) {
@@ -76,7 +76,7 @@ export function retrieveSensorData (formulas) {
             start.add({
                 days: 1
             });
-        } 
+        }
 
         const datesWithMeasurement = flattendeep(formula.measurementType.map(measurementType => {
             return dates.map(date => {
