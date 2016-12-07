@@ -43,7 +43,7 @@ export async function replySensorMeasurements (decoratedSensor) {
                     await dispatch("element inserted in collection readings", kinesisEvent);
                 }, {concurrency: 0});
             });
-        });
+        }, {concurrency: 0});
     }
 }
 
