@@ -22,6 +22,11 @@ export async function replySensorMeasurements (decoratedSensor) {
         const aggregatesByFormula = retrieveSensorData(formulas);
 
         await map(aggregatesByFormula, async (aggregateByFormula) => {
+
+            log.debug({
+                ids: aggregateByFormula.ids
+            });
+
             const sensorsData = await findSensorAggregate({
                 _id: {
                     $in: aggregateByFormula.ids
