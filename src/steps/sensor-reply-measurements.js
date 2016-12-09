@@ -70,14 +70,17 @@ export function findFormulasDelta (sensor, sensorCompare) {
 
 export function retrieveSensorData (formulas) {
     const result = formulas.map(formula => {
+        const now = moment.utc();
         const end = moment.utc(formula.end);
         var start = moment.utc(formula.start);
 
         var days = Math.ceil((moment.duration(end.valueOf() - start.valueOf()).asDays()));
 
         var dates = [];
-        while (days >= 0) {
-            dates[--days] = `${start.format("YYYY-MM-DD")}`;
+        var i = 0;
+        while (now.valueOf() >= start.valueOf() && days >= 0) {
+            dates[i++] = `${start.format("YYYY-MM-DD")}`;
+            days--;
             start.add({
                 days: 1
             });
