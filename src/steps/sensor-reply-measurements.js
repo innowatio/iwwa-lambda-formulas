@@ -1,4 +1,4 @@
-import {map} from "bluebird";
+import {mapSeries} from "bluebird";
 import flattendeep from "lodash.flattendeep";
 import isequal from "lodash.isequal";
 import moment from "moment";
@@ -21,7 +21,7 @@ export async function replySensorMeasurements (decoratedSensor) {
 
         const aggregatesByFormula = retrieveSensorData(formulas);
 
-        await map(aggregatesByFormula, async (aggregateByFormula) => {
+        await mapSeries(aggregatesByFormula, async (aggregateByFormula) => {
 
             log.debug({
                 ids: aggregateByFormula.ids
@@ -35,20 +35,20 @@ export async function replySensorMeasurements (decoratedSensor) {
 
             log.debug({sensorsData});
 
-            await map(sensorsData, async (sensorData) => {
+            await mapSeries(sensorsData, async (sensorData) => {
 
                 const splittedValues = sensorData.measurementValues.split(",").filter(x => x);
                 const splittedTimes = sensorData.measurementTimes.split(",").filter(x => x);
 
-                await map(splittedValues, async (value, index) => {
+                await mapSeries(splittedValues, async (value, index) => {
                     const timestamp = splittedTimes[index];
 
                     const kinesisEvent = createKinesisEvent(sensorData, value, timestamp);
 
                     await dispatch("element inserted in collection readings", kinesisEvent);
-                }, {concurrency: 0});
+                });
             });
-        }, {concurrency: 0});
+        });
     }
 }
 
