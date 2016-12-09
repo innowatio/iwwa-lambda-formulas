@@ -33,7 +33,7 @@ export async function replySensorMeasurements (decoratedSensor) {
                 }
             });
 
-            log.info({sensorsData});
+            log.debug({sensorsData});
 
             await map(sensorsData, async (sensorData) => {
 
