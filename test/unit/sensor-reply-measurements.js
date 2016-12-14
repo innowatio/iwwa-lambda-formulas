@@ -146,6 +146,36 @@ describe("`retrieveSensorIds` function", () => {
         }];
         const resultZthl = retrieveSensorData(formulasZthl);
         expect(resultZthl).to.deep.equal(expectedZthl);
+
+        const formulasCapped = [{
+            formula: "COOV01",
+            measurementType: ["temperature"],
+            variables: ["COOV01"],
+            start: "2015-10-20T00:00:00Z",
+            end: "2016-01-02T00:00:00Z"
+        }];
+        const expectedCapped = [{
+            formula: "COOV01",
+            ids: [
+                "COOV01-2015-12-19-reading-temperature",
+                "COOV01-2015-12-20-reading-temperature",
+                "COOV01-2015-12-21-reading-temperature",
+                "COOV01-2015-12-22-reading-temperature",
+                "COOV01-2015-12-23-reading-temperature",
+                "COOV01-2015-12-24-reading-temperature",
+                "COOV01-2015-12-25-reading-temperature",
+                "COOV01-2015-12-26-reading-temperature",
+                "COOV01-2015-12-27-reading-temperature",
+                "COOV01-2015-12-28-reading-temperature",
+                "COOV01-2015-12-29-reading-temperature",
+                "COOV01-2015-12-30-reading-temperature",
+                "COOV01-2015-12-31-reading-temperature",
+                "COOV01-2016-01-01-reading-temperature",
+                "COOV01-2016-01-02-reading-temperature"
+            ]
+        }];
+        const resultCapped = retrieveSensorData(formulasCapped);
+        expect(resultCapped).to.deep.equal(expectedCapped);
     });
 });
 

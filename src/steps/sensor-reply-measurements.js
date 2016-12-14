@@ -1,4 +1,4 @@
-import {mapSeries} from "bluebird";
+import {map, mapSeries} from "bluebird";
 import flattendeep from "lodash.flattendeep";
 import isequal from "lodash.isequal";
 import moment from "moment";
@@ -6,6 +6,7 @@ import moment from "moment";
 import log from "../services/logger";
 import {dispatch} from "../services/dispatcher";
 import {findVirtualSensor, findSensorAggregate} from "../services/mongodb";
+import {MAX_DAYS} from "config";
 
 export async function replySensorMeasurements (decoratedSensor) {
     log.info({
@@ -40,13 +41,13 @@ export async function replySensorMeasurements (decoratedSensor) {
                 const splittedValues = sensorData.measurementValues.split(",").filter(x => x);
                 const splittedTimes = sensorData.measurementTimes.split(",").filter(x => x);
 
-                await mapSeries(splittedValues, async (value, index) => {
+                await map(splittedValues, async (value, index) => {
                     const timestamp = splittedTimes[index];
 
                     const kinesisEvent = createKinesisEvent(sensorData, value, timestamp);
 
                     await dispatch("element inserted in collection readings", kinesisEvent);
-                });
+                }, {concurrency: 100});
             });
         });
     }
@@ -86,8 +87,12 @@ export function retrieveSensorData (formulas) {
             });
         }
 
+        const slice = dates.length > MAX_DAYS ? MAX_DAYS : dates.length;
+
+        const cappedDates = dates.slice(dates.length - slice);
+
         const datesWithMeasurement = flattendeep(formula.measurementType.map(measurementType => {
-            return dates.map(date => {
+            return cappedDates.map(date => {
                 return `${date}-reading-${measurementType}`;
             });
         }));
@@ -97,7 +102,6 @@ export function retrieveSensorData (formulas) {
                 return `${sensorId}-${date}`;
             });
         }));
-
 
         return {
             formula: formula.formula,
