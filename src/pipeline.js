@@ -1,6 +1,6 @@
 import log from "./services/logger";
+
 import {upsertSensorFormulas} from "./steps/sensor-save-mongodb";
-import {replySensorMeasurements} from "./steps/sensor-reply-measurements";
 import {decorateSensorFormula} from "./steps/sensor-formulas-decorator";
 
 export default async function pipeline (event) {
@@ -25,11 +25,9 @@ export default async function pipeline (event) {
             id: event.data.id
         });
 
-        await replySensorMeasurements(decoratedSensorFormula);
-
         await upsertSensorFormulas(event.data.id, decoratedSensorFormula);
     } catch (error) {
-        log.fatal(error);
+        log.error(error);
         throw error;
     }
 }

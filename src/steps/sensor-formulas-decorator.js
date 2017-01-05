@@ -1,20 +1,15 @@
-import flattendeep from "lodash.flattendeep";
 import uniq from "lodash.uniq";
 
-export function retriveFormulaMeasurementType (formulas) {
-    return uniq(flattendeep(formulas.map(formula => {
-        return formula.measurementType;
-    }))).filter(x => x);
-}
-
-export function decorateSensorFormula (sensorFormula) {
+export function decorateSensorFormula (sensor) {
     var decoratedSensorFormula = {
-        ...sensorFormula
+        ...sensor
     };
-    decoratedSensorFormula.measurementType = retriveFormulaMeasurementType(sensorFormula.formulas);
-    decoratedSensorFormula.formulas = sensorFormula.formulas;
-    decoratedSensorFormula.variables = uniq(sensorFormula.formulas.reduce((prev, formula) => {
-        return [...prev, ...formula.variables];
+
+    decoratedSensorFormula.formulas = sensor.formulas;
+
+    decoratedSensorFormula.sensorsIds = uniq(sensor.formulas.reduce((prev, formula) => {
+        return [...prev, ...formula.variables.map(x => x.sensorId)];
     }, []));
+
     return decoratedSensorFormula;
 }
